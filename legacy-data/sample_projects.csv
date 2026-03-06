@@ -1,0 +1,6 @@
+project_name,region_level,region_name,industry,budget_amount,stage,expected_bid_date,owner_agency,source_type,source_url,confidence
+"某市智慧交通一体化平台",市,广州市,智慧交通,280000000,招标前,2026-06-30,广州市交通运输局,意向公告,https://example.gov.cn/project/traffic-001,medium
+"某区城市治理AI中台",区,深圳市南山区,城市治理,120000000,立项,2026-08-15,南山区政数局,发改批复,https://example.gov.cn/project/city-ai-002,high
+"某省应急指挥可视化升级",省,浙江省,应急管理,360000000,规划,2026-09-01,浙江省应急管理厅,预算披露,https://example.gov.cn/project/emergency-003,medium
+"某市教育数字底座二期",市,成都市,教育数字化,95000000,意向,2026-07-20,成都市教育局,意向公告,https://example.gov.cn/project/edu-004,low
+"某区低空经济监管平台",区,杭州市余杭区,低空经济,180000000,招标中,2026-05-30,余杭区发改局,招标公告,https://example.gov.cn/project/lowalt-005,high

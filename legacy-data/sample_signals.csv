@@ -1,0 +1,6 @@
+project_name,signal_type,signal_title,signal_date,signal_value,source_url,confidence
+"某市智慧交通一体化平台",意向公告,"智慧交通一体化平台建设意向公告",2026-03-01,"预算预估2.8亿，计划Q2启动",https://example.gov.cn/signal/traffic-001,medium
+"某区城市治理AI中台",发改批复,"关于城市治理AI中台可研批复",2026-02-26,"同意开展前期招标准备",https://example.gov.cn/signal/city-ai-002,high
+"某省应急指挥可视化升级",预算披露,"省级专项预算披露（应急方向）",2026-02-20,"专项预算3.6亿",https://example.gov.cn/signal/emergency-003,medium
+"某市教育数字底座二期",意向公告,"教育数字底座二期需求征集",2026-02-28,"预研阶段，需求侧访谈中",https://example.gov.cn/signal/edu-004,low
+"某区低空经济监管平台",招标公告,"低空经济监管平台公开招标公告",2026-03-03,"招标文件已发布",https://example.gov.cn/signal/lowalt-005,high

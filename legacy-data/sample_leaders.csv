@@ -1,0 +1,6 @@
+name,gender,current_title,agency,region_name,education,resume_summary,relation_notes,source_url,confidence
+"张某",男,"副局长",广州市交通运输局,广州市,"硕士","长期分管智慧交通与基建数字化","公开履历显示长期在交通系统任职",https://example.gov.cn/leader/zhang-001,medium
+"李某",女,"党组成员",南山区政数局,深圳市南山区,"博士","负责城市治理与数据平台统筹","公开信息显示有跨部门协调经验",https://example.gov.cn/leader/li-002,high
+"王某",男,"处长",浙江省应急管理厅,浙江省,"硕士","负责信息化与指挥系统建设","公开简历可追溯",https://example.gov.cn/leader/wang-003,medium
+"赵某",女,"副主任",成都市教育局,成都市,"硕士","牵头教育数字底座项目推进","公开活动报道多次出现",https://example.gov.cn/leader/zhao-004,low
+"陈某",男,"副局长",余杭区发改局,杭州市余杭区,"本科","负责新兴产业与重大项目评估","公开信息显示低空经济相关表态",https://example.gov.cn/leader/chen-005,high
