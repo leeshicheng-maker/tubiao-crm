@@ -1,262 +1,116 @@
-# 图标CRM - 后端安装与设置指南
+# 图标CRM 后端启动指南
 
-## 前置要求
+## 快速开始（10分钟）
 
-确保你的开发环境满足以下要求：
+### 第1步：数据库（Supabase，免费）
 
-- **Node.js** >= 20.0.0
-- **npm** >= 9.0.0 或 pnpm >= 8.0.0
-- **PostgreSQL** >= 14.0 或使用 Prisma Postgres（免费云数据库）
-- **Git**
+1. 去 [supabase.com](https://supabase.com) 注册
+2. 点 **New Project**，填项目名 `tubiao-crm`
+3. 等约2分钟初始化完成
+4. 进 **Settings → Database → Connection string → URI**
+5. 复制连接串（格式：`postgresql://postgres:xxxx@db.xxxx.supabase.co:5432/postgres`）
 
-## 快速开始
-
-### 1. 克隆项目
+### 第2步：环境变量
 
 ```bash
-git clone <repository-url>
-cd tubiao-crm/backend
+cd backend
+cp .env.example .env
+# 编辑 .env，填入 DATABASE_URL
 ```
 
-### 2. 安装依赖
+### 第3步：安装依赖 & 建表
 
 ```bash
 npm install
+npx prisma migrate dev --name init
+npx prisma generate
 ```
 
-### 3. 配置环境变量
-
-复制 `.env.example` 文件并创建实际的 `.env` 文件：
-
-```bash
-cp .env.example .env
+成功后会看到：
+```
+✔ Generated Prisma Client
+✔ Applied 1 migration: 20260308_init
 ```
 
-编辑 `.env` 文件，配置数据库连接：
-
-```env
-# Database
-DATABASE_URL="postgresql://username:password@localhost:5432/tubiao_crm?schema=public"
-
-# Application
-NEXT_PUBLIC_API_BASE_URL="http://localhost:3000"
-NODE_ENV="development"
-
-# JWT Secret
-JWT_SECRET="your-jwt-secret-key-change-in-production"
-```
-
-### 4. 数据库设置
-
-#### 选项A：使用本地PostgreSQL
-
-1. 创建数据库：
-```sql
-CREATE DATABASE tubiao_crm;
-```
-
-2. 更新 `.env` 中的 `DATABASE_URL`
-
-3. 运行数据库迁移：
-```bash
-npm run db:migrate
-```
-
-这会创建所有必要的表和关系。
-
-#### 选项B：使用Prisma Postgres（推荐用于开发）
-
-Prisma提供免费的云PostgreSQL数据库，非常适合开发和测试：
-
-```bash
-# 创建Prisma数据库（首次使用）
-npm exec -- create-db
-
-# 这会自动更新你的 DATABASE_URL
-# 然后运行迁移
-npm run db:migrate
-```
-
-### 5. 生成Prisma客户端
-
-```bash
-npm run db:generate
-```
-
-### 6. 启动开发服务器
+### 第4步：启动
 
 ```bash
 npm run dev
+# 服务跑在 http://localhost:3000
 ```
 
-访问 `http://localhost:3000` 应该能看到Next.js的欢迎页面。
-
-API端点示例：
-- `http://localhost:3000/api/v1/contacts`
-- `http://localhost:3000/api/v1/opportunities`
-- `http://localhost:3000/api/v1/dashboard/overview`
-
-## 数据库管理
-
-### Prisma Studio
-
-使用可视化界面管理数据库：
+### 第5步：验证
 
 ```bash
-npm run db:studio
+# 测试 API
+curl http://localhost:3000/api/v1/opportunities
+# 应该返回：{"success":true,"data":{"opportunities":[],"pagination":{...}}}
 ```
-
-这会打开一个本地Web界面，可以查看和编辑数据库。
-
-### 创建新迁移
-
-当你修改了 `prisma/schema.prisma` 文件后：
-
-```bash
-npm run db:migrate
-```
-
-### 重置数据库（开发环境）
-
-⚠️ **警告：此操作会删除所有数据！**
-
-```bash
-npx prisma migrate reset
-```
-
-## 测试
-
-### 运行测试
-
-```bash
-npm test
-```
-
-### 监听模式运行测试
-
-```bash
-npm run test:watch
-```
-
-查看测试覆盖率的命令需在 jest.config.js 中配置 `coverage` 选项后运行。
-
-## 代码质量
-
-### 检查代码规范
-
-```bash
-npm run lint
-```
-
-### 格式化代码
-
-```bash
-npm run format
-```
-
-### 检查格式是否符合规范
-
-```bash
-npm run format:check
-```
-
-## 构建与部署
-
-### 构建生产版本
-
-```bash
-npm run build
-```
-
-### 运行生产服务器
-
-```bash
-npm start
-```
-
-## 环境变量详解
-
-| 变量名 | 说明 | 必需 | 示例 |
-|--------|------|------|------|
-| DATABASE_URL | PostgreSQL数据库连接字符串 | 是 | `postgresql://user:pass@localhost:5432/db` |
-| NEXT_PUBLIC_API_BASE_URL | API基础URL | 是 | `http://localhost:3000` |
-| NODE_ENV | 运行环境 | 否 | `development` \| `production` |
-| JWT_SECRET | JWT密钥 | 生产环境必须 | `your-secret-key` |
-
-## 常见问题
-
-### 1. 数据库连接失败
-
-检查PostgreSQL是否运行：
-```bash
-# macOS
-psql -U postgres -c "SELECT version();"
-
-# Linux
-sudo systemctl status postgresql
-```
-
-### 2. Prisma客户端生成失败
-
-删除 `node_modules/.prisma` 后重新生成：
-```bash
-rm -rf node_modules/.prisma
-npm run db:generate
-```
-
-### 3. 端口被占用
-
-修改 `next.config.ts` 或使用环境变量：
-```bash
-PORT=3001 npm run dev
-```
-
-### 4. 迁移冲突
-
-重置迁移历史（开发环境）：
-```bash
-npx prisma migrate reset
-```
-
-## 开发工具推荐
-
-- **PostgreSQL客户端**：TablePlus, DBeaver, pgAdmin
-- **API测试**：Postman, Insomnia, 或使用 VS Code REST Client
-- **Git GUI**：GitKraken, SourceTree
-
-## 生产部署建议
-
-### 推荐平台
-
-1. **Vercel** - Next.js最佳选择
-2. **Railway** - 简单的数据库托管
-3. **Neon/PlanetScale** - 现代化云数据库
-4. **Render/Fly.io** - 全栈应用部署
-
-### 部署检查清单
-
-- [ ] 设置生产环境的 `DATABASE_URL`
-- [ ] 配置强 `JWT_SECRET`
-- [ ] 设置 `NODE_ENV=production`
-- [ ] 配置数据库备份策略
-- [ ] 设置监控和日志
-- [ ] 配置域名和SSL
-
-## 下一步
-
-- 查看 [API文档](../docs/03-API与数据字典-V1.md)
-- 阅读 [技术栈说明](./TECH_STACK.md)
-- 查看项目根目录的 README.md
-
-## 获取帮助
-
-如遇到问题，请：
-1. 查看本文档的常见问题部分
-2. 检查 [Prisma文档](https://www.prisma.io/docs)
-3. 查看 [Next.js文档](https://nextjs.org/docs)
-4. 联系项目维护者
 
 ---
 
-版本: 0.1.0
-最后更新: 2026-03-07
+## 机器人配置
+
+在 `.env` 中填入 Telegram 配置后，可手动测试机器人：
+
+```bash
+# 机会猎手（采集政府项目）
+BOT_TASK=opportunity-hunter npx ts-node src/bots/index.ts
+
+# 跟进卫士（检查待跟进项目）
+BOT_TASK=followup-guard npx ts-node src/bots/index.ts
+```
+
+机器人 cron 定时任务在 OpenClaw 中配置（见主工作区 HEARTBEAT.md）。
+
+---
+
+## 项目结构
+
+```
+backend/
+├── src/
+│   ├── app/api/v1/          # REST API 路由
+│   │   ├── contacts/        # 联系人
+│   │   ├── nodes/           # 超级节点
+│   │   ├── opportunities/   # 机会（含转项目接口）
+│   │   ├── projects/        # 项目
+│   │   ├── interactions/    # 跟进记录
+│   │   ├── tasks/           # 任务
+│   │   └── dashboard/       # 看板统计
+│   ├── bots/                # 机器人
+│   │   ├── opportunity-hunter.ts  # 机会猎手
+│   │   ├── followup-guard.ts      # 跟进卫士
+│   │   └── index.ts               # 调度入口
+│   ├── lib/prisma.ts        # Prisma 客户端
+│   └── middleware.ts        # 认证中间件
+├── prisma/
+│   └── schema.prisma        # 数据模型（8个表）
+├── .env.example             # 环境变量模板
+└── TECH_STACK.md            # 技术栈说明
+```
+
+---
+
+## API 一览
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/v1/opportunities | 机会列表 |
+| POST | /api/v1/opportunities | 创建机会 |
+| GET | /api/v1/opportunities/:id | 机会详情 |
+| PATCH | /api/v1/opportunities/:id | 更新机会 |
+| POST | /api/v1/opportunities/:id/convert-project | 机会转项目 |
+| GET | /api/v1/projects | 项目列表 |
+| GET | /api/v1/projects/:id | 项目详情 |
+| PATCH | /api/v1/projects/:id | 更新项目阶段 |
+| GET | /api/v1/contacts | 联系人列表 |
+| POST | /api/v1/contacts | 创建联系人 |
+| GET | /api/v1/nodes | 超级节点列表 |
+| POST | /api/v1/nodes | 创建节点 |
+| GET | /api/v1/interactions | 跟进记录 |
+| POST | /api/v1/interactions | 记录跟进 |
+| GET | /api/v1/tasks | 任务列表 |
+| POST | /api/v1/tasks | 创建任务 |
+| PATCH | /api/v1/tasks/:id | 更新/完成任务 |
+| GET | /api/v1/dashboard/overview | 看板统计 |
